@@ -1,0 +1,2 @@
+recursive-include tutorwordpress/patches *
+recursive-include tutorwordpress/templates *
