@@ -34,6 +34,15 @@ ci-info: ## Print info about environment
 bootstrap-dev: ## Install dev requirements
 	pip install .[dev]
 
+build-pythonpackage:  ## Build Python package ready to upload to pypi
+	python setup.py sdist
+
+push-pythonpackage: ## Push python package to pypi
+	twine upload --skip-existing dist/tutor-contrib-wordpress-$(shell make version).tar.gz
+
+version: ## Print the current tutor version
+	@python -c 'import io, os; about = {}; exec(io.open(os.path.join("tutorwordpress", "__about__.py"), "rt", encoding="utf-8").read(), about); print(about["__version__"])'
+
 ESCAPE = 
 help: ## Print this help
 	@grep -E '^([a-zA-Z_-]+:.*?## .*|######* .+)$$' Makefile \
