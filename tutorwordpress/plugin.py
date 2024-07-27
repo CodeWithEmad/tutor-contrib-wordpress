@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from glob import glob
 
 import click
 from tutor import fmt, hooks, config as tutor_config
@@ -78,12 +77,10 @@ def config(context: click.Context) -> None:
     protocol = "https" if config["ENABLE_HTTPS"] else "http"
     lms_host = f"{protocol}://{config['LMS_HOST']}"
     click.echo(fmt.title("WordPress Plugin Configurations"))
-    click.echo(
     fmt.echo_info(
         "\n"
         f"Open edX Domain: {lms_host} \n"
         f"Client ID: {config['WORDPRESS_OAUTH2_KEY_SSO']} \n"
         f"Client ID (dev): {config['WORDPRESS_OAUTH2_KEY_SSO_DEV']} \n"
         f"Client Secret: {config['WORDPRESS_OAUTH2_SECRET']} \n"
-        )
     )
