@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import os
+import sys
 
 import click
 from tutor import fmt, hooks, config as tutor_config
 
 from .__about__ import __version__
 
-try:
-    import importlib.resources as importlib_resources
-except ImportError:
-    import importlib_resources
+if sys.version_info >= (3, 9):
+    from importlib.resources import files as importlib_resources_files
+else:
+    import pkg_resources
 
 ###############
 # CONFIGURATION
@@ -45,11 +46,20 @@ MY_INIT_TASKS: list[tuple[str, tuple[str, ...]]] = [
     ("lms", ("wordpress", "tasks", "lms", "init.sh")),
 ]
 
+
+def get_template_full_path(package_name: str, *template_path: str) -> str:
+    if sys.version_info >= (3, 9):
+        return str(
+            importlib_resources_files(package_name)
+            / os.path.join("templates", *template_path)
+        )
+    else:
+        resource_path = pkg_resources.resource_filename(package_name, "")
+        return os.path.join(resource_path, "templates", *template_path)
+
+
 for service, template_path in MY_INIT_TASKS:
-    full_path: str = str(
-        importlib_resources.files("tutorwordpress")
-        / os.path.join("templates", *template_path)
-    )
+    full_path: str = get_template_full_path("tutorwordpress", *template_path)
     with open(full_path, encoding="utf-8") as init_task_file:
         init_task: str = init_task_file.read()
     hooks.Filters.CLI_DO_INIT_TASKS.add_item((service, init_task))
