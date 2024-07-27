@@ -54,7 +54,7 @@ Inside your WordPress admin panel, you will need to configure the following valu
 - **Client ID**
 - **Client Secret**
 
-.. image:: https://raw.githubusercontent.com/codewithemad/tutor-contrib-wordpress/master/images/openedx-sync-plugin-settings.webp
+.. image:: https://raw.githubusercontent.com/codewithemad/tutor-contrib-wordpress/master/images/openedx-sync-plugin-settings.png
    :alt: Open edX Sync Plugin Settings in your WordPress Settings
 
 
