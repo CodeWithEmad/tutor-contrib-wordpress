@@ -79,11 +79,11 @@ def config(context: click.Context) -> None:
     lms_host = f"{protocol}://{config['LMS_HOST']}"
     click.echo(fmt.title("WordPress Plugin Configurations"))
     click.echo(
-        fmt.echo_info(
-            "\n"
-            f"Open edX Domain: {lms_host} \n"
-            f"Client ID: {config['WORDPRESS_OAUTH2_KEY_SSO']} \n"
-            f"Client ID (dev): {config['WORDPRESS_OAUTH2_KEY_SSO_DEV']} \n"
-            f"Client Secret: {config['WORDPRESS_OAUTH2_SECRET']} \n"
+    fmt.echo_info(
+        "\n"
+        f"Open edX Domain: {lms_host} \n"
+        f"Client ID: {config['WORDPRESS_OAUTH2_KEY_SSO']} \n"
+        f"Client ID (dev): {config['WORDPRESS_OAUTH2_KEY_SSO_DEV']} \n"
+        f"Client Secret: {config['WORDPRESS_OAUTH2_SECRET']} \n"
         )
     )
