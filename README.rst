@@ -17,6 +17,13 @@ The plugin allows seamless synchronization and interaction between your WordPres
 providing a cohesive e-commerce experience. If you don't know how to install the WordPress plugin, check out
 this `installation guide`_.
 
+Before you start
+----------------
+
+This plugin does **not** create or manage a WordPress instance at the moment. It is designed to assist with the
+configuration and integration of the Open edX platform with an existing WordPress site. If you need this feature,
+feel free to open an issue or better yet, a PR.
+
 Prerequisites
 -------------
 
