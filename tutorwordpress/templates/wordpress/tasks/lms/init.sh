@@ -8,14 +8,14 @@
 # wordpress user must be staff a staff to create, edit, and delete enrollments.
 ./manage.py lms manage_user wordpress wordpress@openedx --staff  --unusable-password
 ./manage.py lms create_dot_application \
-  --grant-type client-credentials \
+  --grant-type client_credentials \
   --client-id {{ WORDPRESS_OAUTH2_KEY_SSO }} \
   --client-secret {{ WORDPRESS_OAUTH2_SECRET }} \
   --scopes user_id \
   --skip-authorization \
   --update wordpress-sso wordpress
 ./manage.py lms create_dot_application \
-  --grant-type client-credentials \
+  --grant-type client_credentials \
   --client-id {{ WORDPRESS_OAUTH2_KEY_SSO_DEV }} \
   --client-secret {{ WORDPRESS_OAUTH2_SECRET }} \
   --scopes user_id \
