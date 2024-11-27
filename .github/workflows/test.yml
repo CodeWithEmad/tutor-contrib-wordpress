@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-         python-version: ['3.8', '3.12']
+         python-version: ['3.7', '3.12']
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
@@ -20,6 +20,15 @@ jobs:
         run: python -m pip install --upgrade pip
       - name: Install dependencies
         run: |
+          if [ "${{ matrix.python-version }}" = "3.7" ]; then
+            pip install "tutor==15.0.0" pylint black mypy types-setuptools
+          else
+            pip install -U tutor
+          fi
+          echo "Installing tutor-contrib-wordpress"
           pip install .[dev]
+          echo "Enable wordpress plugin and save configuration"
+          tutor plugins enable wordpress
+          tutor config save
       - name: Test lint, types, and format
         run: make test

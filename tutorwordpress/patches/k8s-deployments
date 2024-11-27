@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app.kubernetes.io/name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wordpress
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: wordpress
+    spec:
+      initContainers:
+        - name: init-wordpress
+          image: {{ WORDPRESS_DOCKER_IMAGE }}
+          command: ['sh', '-c', 'chown -R www-data:www-data /var/www/html/wp-content']
+          volumeMounts:
+            - name: wordpress-data
+              mountPath: /var/www/html/wp-content
+          securityContext:
+            runAsUser: 0
+      containers:
+        - name: wordpress
+          image: {{ WORDPRESS_DOCKER_IMAGE }}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: {{ WORDPRESS_MYSQL_HOST }}
+            - name: WORDPRESS_DB_USER
+              value: {{ WORDPRESS_MYSQL_USERNAME }}
+            - name: WORDPRESS_DB_PASSWORD
+              value: {{ WORDPRESS_MYSQL_PASSWORD }}
+            - name: WORDPRESS_DB_NAME
+              value: {{ WORDPRESS_MYSQL_DATABASE }}
+            - name: WORDPRESS_TABLE_PREFIX
+              value: {{ WORDPRESS_TABLE_PREFIX }}
+          volumeMounts:
+            - name: wordpress-data
+              mountPath: /var/www/html/wp-content
+          securityContext:
+            runAsUser: 33
+            runAsGroup: 33
+      volumes:
+        - name: wordpress-data
+          persistentVolumeClaim:
+            claimName: wordpress-data

@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-data
+  labels:
+    app.kubernetes.io/component: volume
+    app.kubernetes.io/name: wordpress-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ WORDPRESS_DATA_VOLUME_SIZE }}

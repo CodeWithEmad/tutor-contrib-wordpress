@@ -1,0 +1,16 @@
+wordpress:
+  image: {{ WORDPRESS_DOCKER_IMAGE }}
+  restart: unless-stopped
+  environment:
+    WORDPRESS_DB_HOST: {{ WORDPRESS_MYSQL_HOST }}
+    WORDPRESS_DB_USER: {{ WORDPRESS_MYSQL_USERNAME }}
+    WORDPRESS_DB_PASSWORD: {{ WORDPRESS_MYSQL_PASSWORD }}
+    WORDPRESS_DB_NAME: {{ WORDPRESS_MYSQL_DATABASE }}
+    WORDPRESS_TABLE_PREFIX: {{ WORDPRESS_TABLE_PREFIX }}
+  volumes:
+    - ../../data/wordpress/wp-content:/var/www/html/wp-content
+  {%- if RUN_MYSQL %}
+  depends_on:
+    - mysql
+  {% endif -%}
+

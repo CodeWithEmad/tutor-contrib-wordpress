@@ -1,0 +1,5 @@
+# WordPress
+{{ WORDPRESS_HOST }}{$default_site_port} {
+
+    import proxy "wordpress:{{ WORDPRESS_PORT }}"
+}
