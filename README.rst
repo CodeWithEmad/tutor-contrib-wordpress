@@ -10,28 +10,23 @@ WordPress Plugin for `Tutor`_
    :target: https://www.gnu.org/licenses/agpl-3.0.en.html
 
 Overview
---------
+********
 
-This is a `Tutor`_ plugin for integrating the `Open edX Commerce WordPress Plugin`_ with your Open edX instance.
-The plugin allows seamless synchronization and interaction between your WordPress site and Open edX platform,
-providing a cohesive e-commerce experience. If you don't know how to install the WordPress plugin, check out
-this `installation guide`_.
+This is a `Tutor`_ plugin that provides complete WordPress integration with your Open edX instance. It includes:
 
-Before you start
-----------------
+- Full WordPress installation and management
+- Integration with the `Open edX Commerce WordPress Plugin`_
 
-This plugin does **not** create or manage a WordPress instance at the moment. It is designed to assist with the
-configuration and integration of the Open edX platform with an existing WordPress site. If you need this feature,
-feel free to open an issue or better yet, a PR.
+If you need help installing the WordPress plugin, check out this `installation guide`_.
 
 Prerequisites
--------------
+*************
 
-- A running WordPress site with the `Open edX Commerce WordPress Plugin`_ installed.
-- Installation of Tutor version >= 15.0.0.
+- Installation of Tutor version >= 15.0.0
+- MySQL database (can use the same one as Open edX)
 
 Installation
-------------
+************
 
 Ensure you are using Tutor v15+ (Olive onwards). First, install the plugin by running:
 
@@ -51,59 +46,95 @@ Alternatively, if you already have a running Open edX instance, just run the nec
 .. code-block:: bash
 
     tutor dev|local|k8s do init --limit=wordpress
+    tutor dev|local|k8s start wordpress
 
 Configuration
--------------
+*************
 
-Inside your WordPress admin panel, you will need to configure the following values:
+The plugin automatically installs WordPress with the Open edX Commerce and Woocommerce plugins. Inside your WordPress
+admin panel, go to Settings -> Open edX Sync plugin, and configure:
 
 - **Open edX Domain**
 - **Client ID**
 - **Client Secret**
 
+To verify the connection, click on "Generate JWT Token". If the process is successful, a new token will be generated.
+
 .. image:: https://raw.githubusercontent.com/codewithemad/tutor-contrib-wordpress/master/images/openedx-sync-plugin-settings.png
    :alt: Open edX Sync Plugin Settings in your WordPress Settings
-
 
 You can retrieve these configuration values by running:
 
 .. code-block:: bash
 
-    tutor wordpress config
+    tutor dev|local|k8s do wordpress config
 
+This command will output the current configurations, including the Client ID, Client Secret, Open edX Domain,
+and WordPress Domain. Here is an example of the output:
 
 .. code-block:: text
 
     ===============================================
-            WordPress Plugin Configurations
+        WordPress Plugin Configurations
     ===============================================
 
-    Open edX Domain: http://local.edly.io
-    Client ID: qjCayDktffXrU09N17NrslKyWQ2EwzWn
-    Client ID (dev): JDx6Uy0hN67VUfacxKcLyYQz7HK9liVx
-    Client Secret: P4w82huaZQdyz4qolknsIHYneGEoIggc
+    Client ID: vvpTamiepPwjZhr0uOQGr5PhYBzp2hQw 
+    Client ID (dev): MlbXk1V3wB7nWPAAyLF3McyfBBMqExa4 
+    Client Secret: MdrgbtU8Q94He3gejF6Zf5MDookoeozO 
 
+    Open edX Domain: http://local.edly.io:8000 
+    Wordpress Domain: http://site.local.edly.io:8080
 
-Or by using Tutor to print them individually:
+Variables
+*********
 
-.. code-block:: bash
+The plugin supports the following configuration variables:
 
-    tutor config printvalue LMS_HOST
-    tutor config printvalue WORDPRESS_OAUTH2_SECRET
-    tutor config printvalue WORDPRESS_OAUTH2_KEY_SSO
-    tutor config printvalue WORDPRESS_OAUTH2_KEY_SSO_DEV
+- ``WORDPRESS_VERSION``: Plugin version
+- ``WORDPRESS_HOST``: WordPress site hostname
+- ``WORDPRESS_PORT``: WordPress port (default: 8080)
+- ``WORDPRESS_DOCKER_IMAGE``: Docker image for WordPress
+- ``WORDPRESS_OPENEDX_PLUGIN``: URL to the Open edX Commerce plugin
+- ``WORDPRESS_WOOCOMMERCE_PLUGIN``: (default: "https://downloads.wordpress.org/plugin/woocommerce.9.4.2.zip")
+    The WooCommerce plugin zip file URL. You can specify a different version if needed.
+- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:6.7.1-php8.1")
+    The official WordPress Docker image used as the base for building the plugin's custom image.
+    This image includes PHP and Apache server. You can specify a different version or PHP variant
+    if needed.
+
+Database Settings
+=================
+
+- ``WORDPRESS_MYSQL_HOST``: MySQL host
+- ``WORDPRESS_MYSQL_PORT``: MySQL port
+- ``WORDPRESS_MYSQL_DATABASE``: Database name (default: wordpress)
+- ``WORDPRESS_MYSQL_USERNAME``: Database username
+- ``WORDPRESS_MYSQL_PASSWORD``: Database password (auto-generated)
+- ``WORDPRESS_TABLE_PREFIX``: Table prefix (default: wp_)
+
+Storage Settings
+================
+
+- ``WORDPRESS_DATA_VOLUME_SIZE``: Size of WordPress persistent volume (default: 5Gi)
+
+OAuth2 Settings
+===============
+
+- ``WORDPRESS_OAUTH2_SECRET``: OAuth2 secret key (auto-generated)
+- ``WORDPRESS_OAUTH2_KEY_SSO``: OAuth2 client ID (auto-generated)
+- ``WORDPRESS_OAUTH2_KEY_SSO_DEV``: OAuth2 development client ID (auto-generated)
 
 Contributing
-------------
+************
 
-We welcome all contributions! Feel free to open a Pull Request.
+We welcome all contributions! Feel free to open a Pull Request or an Issue.
 
 License
--------
+*******
 
 This software is licensed under the terms of the `AGPLv3`_.
 
 .. _Tutor: https://docs.tutor.edly.io
-.. _installation guide: https://docs.openedx.org/projects/wordpress-ecommerce-plugin/en/latest/plugin_quickstart.html
 .. _Open edX Commerce WordPress Plugin: https://github.com/openedx/openedx-wordpress-ecommerce
 .. _AGPLv3: https://github.com/codewithemad/tutor-contrib-wordpress/blob/master/LICENSE.txt
+.. _installation guide: https://docs.openedx.org/projects/wordpress-ecommerce-plugin/en/latest/plugin_quickstart.html

@@ -1,0 +1,21 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wordpress-job
+  labels:
+    app.kubernetes.io/component: job
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: wordpress
+          image: {{ WORDPRESS_DOCKER_IMAGE }}
+          volumeMounts:
+            - name: wordpress-data  
+              mountPath: /var/www/html/wp-content
+      volumes:
+        - name: wordpress-data
+          persistentVolumeClaim:
+            claimName: wordpress-data

@@ -1,4 +1,13 @@
 
+<a id='changelog-1.1.0'></a>
+## v1.1.0 (2024-11-27)
+
+- [Feature] Added comprehensive WordPress integration for Open edX including:
+  - Full WordPress installation and configuration management
+  - Integration with Open edX Commerce WordPress Plugin and WooCommerce
+  - Configurable WordPress settings including version, host, ports, and database options
+  (by @CodeWithEmad)
+
 <a id='changelog-1.0.1'></a>
 ## v1.0.1 (2024-07-27)
 

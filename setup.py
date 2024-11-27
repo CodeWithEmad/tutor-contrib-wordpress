@@ -36,29 +36,29 @@ setup(
     license="AGPLv3",
     author="Emad Rad",
     author_email="codewithemad@gmail.com",
-    description="Tutor plugin for WooCommerce",
+    description="Tutor plugin for WordPress.",
     long_description=load_readme(),
     long_description_content_type="text/x-rst",
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
-    python_requires=">=3.8",
-    install_requires=["tutor>=14.0.0,<19.0.0"],
+    python_requires=">=3.7",
+    install_requires=[
+        "tutor>=15.0.0,<19.0.0",
+        "importlib_resources",  # for older versions of tutor
+    ],
     extras_require={
         "dev": [
-            "tutor[dev]>=14.0.0,<19.0.0",
+            "tutor[dev]>=15.0.0,<19.0.0",
         ]
     },
-    entry_points={
-        "tutor.plugin.v1": [
-            "wordpress = tutorwordpress.plugin"
-        ]
-    },
+    entry_points={"tutor.plugin.v1": ["wordpress = tutorwordpress.plugin"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",

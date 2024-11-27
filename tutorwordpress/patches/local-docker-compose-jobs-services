@@ -1,0 +1,7 @@
+wordpress-job:
+  image: {{ WORDPRESS_DOCKER_IMAGE }}
+  volumes:
+    - ../../data/wordpress:/var/www/html/wp-content
+  depends_on:
+    - lms
+    {% if RUN_MYSQL %}- mysql{% endif %}
