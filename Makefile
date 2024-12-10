@@ -39,6 +39,7 @@ build-pythonpackage:  ## Build Python package ready to upload to pypi
 	for f in dist/tutor_contrib_wordpress-*.tar.gz; do mv "$$f" "dist/tutor-contrib-wordpress-$(shell make version).tar.gz"; done
 
 push-pythonpackage: ## Push python package to pypi
+	twine check dist/tutor-contrib-wordpress-$(shell make version).tar.gz
 	twine upload --skip-existing dist/tutor-contrib-wordpress-$(shell make version).tar.gz
 
 version: ## Print the current tutor version
