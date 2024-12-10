@@ -109,7 +109,7 @@ Database Settings
 - ``WORDPRESS_MYSQL_DATABASE``: Database name (default: wordpress)
 - ``WORDPRESS_MYSQL_USERNAME``: Database username
 - ``WORDPRESS_MYSQL_PASSWORD``: Database password (auto-generated)
-- ``WORDPRESS_TABLE_PREFIX``: Table prefix (default: wp_)
+- ``WORDPRESS_TABLE_PREFIX``: Table prefix (default: ``wp_``)
 
 Storage Settings
 ================
