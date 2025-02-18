@@ -33,6 +33,8 @@ Ensure you are using Tutor v15+ (Olive onwards). First, install the plugin by ru
 .. code-block:: bash
 
     pip install -U tutor-contrib-wordpress
+    # or with tutor
+    tutor plugins install wordpress
 
 Enable the plugin and run the launch command:
 
