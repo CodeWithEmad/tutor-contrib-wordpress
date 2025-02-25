@@ -34,13 +34,12 @@ ci-info: ## Print info about environment
 bootstrap-dev: ## Install dev requirements
 	pip install .[dev]
 
-build-pythonpackage:  ## Build Python package ready to upload to pypi
-	python setup.py sdist
-	for f in dist/tutor_contrib_wordpress-*.tar.gz; do mv "$$f" "dist/tutor-contrib-wordpress-$(shell make version).tar.gz"; done
+build-pythonpackage: ## Build the python package for upload to pypi
+	find . -type d -name "dist" -exec rm -rf {} +
+	hatch build
 
 push-pythonpackage: ## Push python package to pypi
-	twine check dist/tutor-contrib-wordpress-$(shell make version).tar.gz
-	twine upload --skip-existing dist/tutor-contrib-wordpress-$(shell make version).tar.gz
+	hatch publish
 
 version: ## Print the current tutor version
 	@python -c 'import io, os; about = {}; exec(io.open(os.path.join("tutorwordpress", "__about__.py"), "rt", encoding="utf-8").read(), about); print(about["__version__"])'

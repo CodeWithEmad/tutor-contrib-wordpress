@@ -1,0 +1,2 @@
+- [Improvement] Migrate packaging from setup.py/setuptools to pyproject.toml/hatch. (by @CodeWithEmad)
+- [Improvement] Support for tutor v19 added. (by @CodeWithEmad)
