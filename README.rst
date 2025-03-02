@@ -5,6 +5,10 @@ WordPress Plugin for `Tutor`_
    :alt: PyPI releases
    :target: https://pypi.org/project/tutor-contrib-wordpress
 
+.. image:: https://static.pepy.tech/badge/tutor-contrib-wordpress
+   :alt: PyPI Downloads
+   :target: https://pepy.tech/projects/tutor-contrib-wordpress
+
 .. image:: https://img.shields.io/github/license/codewithemad/tutor-contrib-wordpress.svg?style=flat-square
    :alt: AGPL License
    :target: https://www.gnu.org/licenses/agpl-3.0.en.html
