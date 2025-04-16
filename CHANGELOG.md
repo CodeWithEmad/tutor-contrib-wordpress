@@ -1,4 +1,9 @@
 
+<a id='changelog-1.2.0'></a>
+## v1.2.0 (2025-04-16)
+
+- [Improvement] Update WordPress official image version to 6.8.0-php8.1 (by @CodeWithEmad)
+
 <a id='changelog-1.1.1'></a>
 ## v1.1.1 (2025-02-25)
 
