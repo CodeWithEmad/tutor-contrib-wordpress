@@ -73,7 +73,7 @@ You can retrieve these configuration values by running:
 
 .. code-block:: bash
 
-    tutor dev|local|k8s do wordpress config
+    tutor wordpress config
 
 This command will output the current configurations, including the Client ID, Client Secret, Open edX Domain,
 and WordPress Domain. Here is an example of the output:
