@@ -3,7 +3,6 @@ from __future__ import annotations
 from glob import glob
 import os
 import sys
-import typing as t
 
 import click
 from tutor import fmt, hooks as tutor_hooks, config as tutor_config
