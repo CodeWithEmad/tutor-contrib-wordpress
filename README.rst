@@ -88,8 +88,8 @@ and WordPress Domain. Here is an example of the output:
     Client ID (dev): MlbXk1V3wB7nWPAAyLF3McyfBBMqExa4 
     Client Secret: MdrgbtU8Q94He3gejF6Zf5MDookoeozO 
 
-    Open edX Domain: http://local.edly.io:8000 
-    Wordpress Domain: http://site.local.edly.io:8080
+    Open edX Domain: http://local.openedx.io:8000 
+    Wordpress Domain: http://site.local.openedx.io:8080
 
 Variables
 *********
