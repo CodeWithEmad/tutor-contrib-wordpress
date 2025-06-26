@@ -1,7 +1,13 @@
 wordpress-job:
   image: {{ WORDPRESS_DOCKER_IMAGE }}
+  environment:
+    WORDPRESS_DB_HOST: {{ WORDPRESS_MYSQL_HOST }}
+    WORDPRESS_DB_USER: {{ WORDPRESS_MYSQL_USERNAME }}
+    WORDPRESS_DB_PASSWORD: {{ WORDPRESS_MYSQL_PASSWORD }}
+    WORDPRESS_DB_NAME: {{ WORDPRESS_MYSQL_DATABASE }}
+    WORDPRESS_TABLE_PREFIX: {{ WORDPRESS_TABLE_PREFIX }}
   volumes:
-    - ../../data/wordpress:/var/www/html/wp-content
+    - ../../data/wordpress/wp-content:/var/www/html/wp-content
   depends_on:
     - lms
     {% if RUN_MYSQL %}- mysql{% endif %}
