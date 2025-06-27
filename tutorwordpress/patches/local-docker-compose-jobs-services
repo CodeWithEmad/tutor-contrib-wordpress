@@ -7,7 +7,8 @@ wordpress-job:
     WORDPRESS_DB_NAME: {{ WORDPRESS_MYSQL_DATABASE }}
     WORDPRESS_TABLE_PREFIX: {{ WORDPRESS_TABLE_PREFIX }}
   volumes:
-    - ../../data/wordpress/wp-content:/var/www/html/wp-content
+    - ../../data/wordpress:/var/www/html
+
   depends_on:
     - lms
     {% if RUN_MYSQL %}- mysql{% endif %}
