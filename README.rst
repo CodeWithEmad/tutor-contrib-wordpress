@@ -103,7 +103,7 @@ The plugin supports the following configuration variables:
 - ``WORDPRESS_OPENEDX_PLUGIN``: URL to the Open edX Commerce plugin
 - ``WORDPRESS_WOOCOMMERCE_PLUGIN``: (default: "https://downloads.wordpress.org/plugin/woocommerce.9.4.2.zip")
   The WooCommerce plugin zip file URL. You can specify a different version if needed.
-- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:6.8.0-php8.1")
+- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:6.8.1-php8.4")
   The official WordPress Docker image used as the base for building the plugin's custom image.
   This image includes PHP and Apache server. You can specify a different version or PHP variant if needed.
 
