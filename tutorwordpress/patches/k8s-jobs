@@ -12,9 +12,20 @@ spec:
       containers:
         - name: wordpress
           image: {{ WORDPRESS_DOCKER_IMAGE }}
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: {{ WORDPRESS_MYSQL_HOST }}
+            - name: WORDPRESS_DB_USER
+              value: {{ WORDPRESS_MYSQL_USERNAME }}
+            - name: WORDPRESS_DB_PASSWORD
+              value: {{ WORDPRESS_MYSQL_PASSWORD }}
+            - name: WORDPRESS_DB_NAME
+              value: {{ WORDPRESS_MYSQL_DATABASE }}
+            - name: WORDPRESS_TABLE_PREFIX
+              value: {{ WORDPRESS_TABLE_PREFIX }}
           volumeMounts:
             - name: wordpress-data  
-              mountPath: /var/www/html/wp-content
+              mountPath: /var/www/html
       volumes:
         - name: wordpress-data
           persistentVolumeClaim:
