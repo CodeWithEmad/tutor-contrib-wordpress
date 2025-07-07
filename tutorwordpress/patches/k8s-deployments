@@ -17,10 +17,10 @@ spec:
       initContainers:
         - name: init-wordpress
           image: {{ WORDPRESS_DOCKER_IMAGE }}
-          command: ['sh', '-c', 'chown -R www-data:www-data /var/www/html/wp-content']
+          command: ['sh', '-c', 'chown -R www-data:www-data /var/www/html']
           volumeMounts:
             - name: wordpress-data
-              mountPath: /var/www/html/wp-content
+              mountPath: /var/www/html
           securityContext:
             runAsUser: 0
       containers:
@@ -41,7 +41,7 @@ spec:
               value: {{ WORDPRESS_TABLE_PREFIX }}
           volumeMounts:
             - name: wordpress-data
-              mountPath: /var/www/html/wp-content
+              mountPath: /var/www/html
           securityContext:
             runAsUser: 33
             runAsGroup: 33
