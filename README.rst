@@ -73,7 +73,7 @@ You can retrieve these configuration values by running:
 
 .. code-block:: bash
 
-    tutor dev|local|k8s do wordpress config
+    tutor wordpress config
 
 This command will output the current configurations, including the Client ID, Client Secret, Open edX Domain,
 and WordPress Domain. Here is an example of the output:
@@ -88,8 +88,8 @@ and WordPress Domain. Here is an example of the output:
     Client ID (dev): MlbXk1V3wB7nWPAAyLF3McyfBBMqExa4 
     Client Secret: MdrgbtU8Q94He3gejF6Zf5MDookoeozO 
 
-    Open edX Domain: http://local.edly.io:8000 
-    Wordpress Domain: http://site.local.edly.io:8080
+    Open edX Domain: http://local.openedx.io:8000 
+    Wordpress Domain: http://site.local.openedx.io:8080
 
 Variables
 *********
@@ -103,7 +103,7 @@ The plugin supports the following configuration variables:
 - ``WORDPRESS_OPENEDX_PLUGIN``: URL to the Open edX Commerce plugin
 - ``WORDPRESS_WOOCOMMERCE_PLUGIN``: (default: "https://downloads.wordpress.org/plugin/woocommerce.9.4.2.zip")
   The WooCommerce plugin zip file URL. You can specify a different version if needed.
-- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:6.8.0-php8.1")
+- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:6.8.1-php8.4")
   The official WordPress Docker image used as the base for building the plugin's custom image.
   This image includes PHP and Apache server. You can specify a different version or PHP variant if needed.
 

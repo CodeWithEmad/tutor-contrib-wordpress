@@ -11,46 +11,75 @@ jobs:
     strategy:
       matrix:
         include:
-          # https://github.com/actions/runner-images#available-images
           - os: ubuntu-latest
             locale: C.UTF-8
     env:
       LC_ALL: ${{ matrix.locale }}
       LANG: ${{ matrix.locale }}
+
     steps:
       ##### Setup environment
-      # https://github.com/actions/checkout
       - uses: actions/checkout@v4
       - name: Set up Python
-        # https://github.com/actions/setup-python
         uses: actions/setup-python@v5
         with:
           python-version: 3.9
           cache: "pip"
+
       - name: Install Hatch
         uses: pypa/hatch@install
       - name: Print info about the current python installation
         run: make ci-info
       - name: Install requirements
         run: make bootstrap-dev
-      - name: Check or download gh utility
-        run: |
-          if ! which gh; then
-            echo "Downloading 'gh' utility"
-            if [ "$(uname -s)" = "Linux" ]; then
-              curl -L -o gh.tar.gz https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_amd64.tar.gz
-              tar xzf gh.tar.gz
-              mv ./gh_2.28.0_linux_amd64/bin/gh /usr/local/bin/gh
-            else
-              curl -L -o gh.zip https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_macOS_amd64.zip
-              unzip xzf gh.zip
-              mv ./gh_2.28.0_macOS_amd64/bin/gh /usr/local/bin/gh
-            fi
-            which gh
-          fi
 
       ##### Create release on GitHub
       - name: Create or update GitHub release
         run: scriv github-release --repo=codewithemad/tutor-contrib-wordpress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      ##### Publish to PyPI
+      - name: Build and publish to PyPI
+        run: |
+          hatch build
+          hatch publish
+        env:
+          HATCH_INDEX_USER: __token__
+          HATCH_INDEX_AUTH: ${{ secrets.PYPI_TOKEN }}
+
+  build_and_push_image:
+    needs: release # Wait for release job to complete successfully
+    runs-on: ubuntu-latest
+    container: python:3.9-slim
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Install Tutor
+        run: pip install tutor
+
+      - name: Install tutor-plugin-wordpress
+        run: pip install git+https://github.com/codewithemad/tutor-contrib-wordpress@${{ env.TAG }}
+
+      - name: Initialize Tutor
+        run: |
+          tutor config save --interactive=false
+          tutor plugins enable wordpress
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build and push WordPress image
+        run: |
+          tutor images build wordpress
+          tutor images push wordpress

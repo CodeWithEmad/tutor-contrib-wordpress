@@ -3,7 +3,6 @@ from __future__ import annotations
 from glob import glob
 import os
 import sys
-import typing as t
 
 import click
 from tutor import fmt, hooks as tutor_hooks, config as tutor_config
@@ -31,7 +30,7 @@ tutor_hooks.Filters.CONFIG_DEFAULTS.add_items(
         ("WORDPRESS_HOST", "site.{{ LMS_HOST }}"),
         ("WORDPRESS_PORT", "8080"),
         # https://hub.docker.com/_/wordpress/
-        ("WORDPRESS_OFFICIAL_IMAGE", "wordpress:6.8.0-php8.1"),
+        ("WORDPRESS_OFFICIAL_IMAGE", "wordpress:6.8.1-php8.4"),
         (
             "WORDPRESS_DOCKER_IMAGE",
             "docker.io/codewithemad/tutor-wordpress:{{ WORDPRESS_VERSION }}",
