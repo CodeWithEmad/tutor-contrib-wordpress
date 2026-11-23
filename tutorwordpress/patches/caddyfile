@@ -1,5 +1,6 @@
-# WordPress
+{% if WORDPRESS_RUN_LOCAL %}# WordPress
 {{ WORDPRESS_HOST }}{$default_site_port} {
 
-    import proxy "wordpress:{{ WORDPRESS_PORT }}"
+    import proxy "wordpress:8080"
 }
+{% endif %}

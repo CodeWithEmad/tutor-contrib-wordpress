@@ -26,13 +26,17 @@ If you need help installing the WordPress plugin, check out this `installation g
 Prerequisites
 *************
 
-- Installation of Tutor version >= 15.0.0
+- Tutor 20 (Teak) to 22 and Python 3.10 or newer
 - MySQL database (can use the same one as Open edX)
+
+.. note::
+   Plugin v2 supports ``tutor>=20,<23``. For Tutor 15 to 19 (Olive to Sumac) and Python 3.9, pin the old release:
+   ``pip install "tutor-contrib-wordpress<2"``.
 
 Installation
 ************
 
-Ensure you are using Tutor v15+ (Olive onwards). First, install the plugin by running:
+First, install the plugin by running:
 
 .. code-block:: bash
 
@@ -66,7 +70,7 @@ admin panel, go to Settings -> Open edX Sync plugin, and configure:
 
 To verify the connection, click on "Generate JWT Token". If the process is successful, a new token will be generated.
 
-.. image:: https://raw.githubusercontent.com/codewithemad/tutor-contrib-wordpress/master/images/openedx-sync-plugin-settings.png
+.. image:: https://raw.githubusercontent.com/codewithemad/tutor-contrib-wordpress/main/images/openedx-sync-plugin-settings.png
    :alt: Open edX Sync Plugin Settings in your WordPress Settings
 
 You can retrieve these configuration values by running:
@@ -91,6 +95,28 @@ and WordPress Domain. Here is an example of the output:
     Open edX Domain: http://local.openedx.io:8000 
     Wordpress Domain: http://site.local.openedx.io:8080
 
+Using an existing WordPress site
+********************************
+
+The plugin does two jobs: it runs a WordPress container, and it creates the OAuth2 applications in Open edX that the
+WordPress plugin needs. If your WordPress site is hosted elsewhere (another server, a managed host), you only need the second one:
+
+.. code-block:: bash
+
+    tutor config save --set WORDPRESS_RUN_LOCAL=false --set WORDPRESS_HOST=shop.example.com
+    tutor dev|local|k8s do init --limit=wordpress
+    tutor wordpress config
+
+With ``WORDPRESS_RUN_LOCAL=false`` Tutor does not run, route to or create a database for a WordPress container.
+Then, on your external site:
+
+1. Install and activate the `Open edX Commerce WordPress Plugin`_ and WooCommerce (no migration of your site is needed).
+2. Go to Settings -> Open edX Sync plugin and enter the values printed by ``tutor wordpress config``.
+3. Make sure the site can reach your LMS over HTTPS.
+
+To go the other way and move an existing site into Tutor, keep ``WORDPRESS_RUN_LOCAL=true`` and restore your files into
+``$(tutor config printroot)/data/wordpress`` and your database into the ``WORDPRESS_MYSQL_DATABASE`` database.
+
 Variables
 *********
 
@@ -98,12 +124,20 @@ The plugin supports the following configuration variables:
 
 - ``WORDPRESS_VERSION``: Plugin version
 - ``WORDPRESS_HOST``: WordPress site hostname
-- ``WORDPRESS_PORT``: WordPress port (default: 8080)
+- ``WORDPRESS_RUN_LOCAL``: (default: true) Run WordPress inside Tutor. Set to false to only configure Open edX for an external WordPress site.
+- ``WORDPRESS_PORT``: (default: 8080) Host port published in dev mode. The container itself always listens on 8080.
+- ``WORDPRESS_DEBUG``: (default: true) Dev mode only: enable ``WP_DEBUG`` and debug logging.
+- ``WORDPRESS_CONFIG_EXTRA``: (default: empty) PHP code appended to ``wp-config.php``. It is only read when WordPress
+  first generates ``wp-config.php``, so edit the file in the data volume for an existing install.
+- ``WORDPRESS_PHP_MEMORY_LIMIT``: (default: 256M) PHP ``memory_limit``. Requires an image rebuild.
+- ``WORDPRESS_UPLOAD_MAX_FILESIZE``: (default: 64M) PHP ``upload_max_filesize`` and ``post_max_size``. Requires an image rebuild.
+- ``WORDPRESS_EXTRA_PLUGINS``: (default: []) List of plugin zip URLs to install in the image. Requires an image rebuild.
+- ``WORDPRESS_K8S_RESOURCES``: (default: {}) Kubernetes ``resources`` (requests/limits) for the WordPress container.
 - ``WORDPRESS_DOCKER_IMAGE``: Docker image for WordPress
 - ``WORDPRESS_OPENEDX_PLUGIN``: URL to the Open edX Commerce plugin
-- ``WORDPRESS_WOOCOMMERCE_PLUGIN``: (default: "https://downloads.wordpress.org/plugin/woocommerce.9.4.2.zip")
+- ``WORDPRESS_WOOCOMMERCE_PLUGIN``: (default: "https://downloads.wordpress.org/plugin/woocommerce.11.3.1.zip")
   The WooCommerce plugin zip file URL. You can specify a different version if needed.
-- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:6.8.1-php8.4")
+- ``WORDPRESS_OFFICIAL_IMAGE``: (default: "wordpress:7.1.5-php8.4")
   The official WordPress Docker image used as the base for building the plugin's custom image.
   This image includes PHP and Apache server. You can specify a different version or PHP variant if needed.
 
@@ -141,5 +175,5 @@ This software is licensed under the terms of the `AGPLv3`_.
 
 .. _Tutor: https://docs.tutor.edly.io
 .. _Open edX Commerce WordPress Plugin: https://github.com/openedx/openedx-wordpress-ecommerce
-.. _AGPLv3: https://github.com/codewithemad/tutor-contrib-wordpress/blob/master/LICENSE.txt
+.. _AGPLv3: https://github.com/codewithemad/tutor-contrib-wordpress/blob/main/LICENSE.txt
 .. _installation guide: https://docs.openedx.org/projects/wordpress-ecommerce-plugin/en/latest/plugin_quickstart.html

@@ -1,1 +1,1 @@
-- "{{ WORDPRESS_HOST }}"
+{% if WORDPRESS_RUN_LOCAL %}- "{{ WORDPRESS_HOST }}"{% endif %}

@@ -1,84 +1,47 @@
-name: Release and Publish package to PyPI
+name: Release
 
+# PyPI publishing lives in publish-pypi.yml.
 on:
   push:
     tags:
       - "v*"
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            locale: C.UTF-8
-    env:
-      LC_ALL: ${{ matrix.locale }}
-      LANG: ${{ matrix.locale }}
-
+  github_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      ##### Setup environment
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          python-version: 3.9
-          cache: "pip"
-
-      - name: Install Hatch
-        uses: pypa/hatch@install
-      - name: Print info about the current python installation
-        run: make ci-info
-      - name: Install requirements
-        run: make bootstrap-dev
-
-      ##### Create release on GitHub
+          python-version: "3.13"
+          cache: pip
+      - run: pip install scriv
       - name: Create or update GitHub release
         run: scriv github-release --repo=codewithemad/tutor-contrib-wordpress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      ##### Publish to PyPI
-      - name: Build and publish to PyPI
-        run: |
-          hatch build
-          hatch publish
-        env:
-          HATCH_INDEX_USER: __token__
-          HATCH_INDEX_AUTH: ${{ secrets.PYPI_TOKEN }}
-
   build_and_push_image:
-    needs: release # Wait for release job to complete successfully
+    needs: github_release
     runs-on: ubuntu-latest
-    container: python:3.9-slim
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          fetch-depth: 0
-
-      - name: Extract tag
-        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-      - name: Install Tutor
-        run: pip install tutor
-
-      - name: Install tutor-plugin-wordpress
-        run: pip install git+https://github.com/codewithemad/tutor-contrib-wordpress@${{ env.TAG }}
-
-      - name: Initialize Tutor
+          python-version: "3.13"
+          cache: pip
+      - uses: docker/setup-buildx-action@v4
+      - name: Install Tutor and this plugin (from the tagged checkout)
         run: |
+          pip install tutor .
           tutor config save --interactive=false
           tutor plugins enable wordpress
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-
       - name: Build and push WordPress image
         run: |
           tutor images build wordpress

@@ -1,0 +1,43 @@
+name: Publish to PyPI
+
+# Uses PyPI trusted publishing (OIDC), no API token needed.
+# Configure at https://pypi.org/manage/project/tutor-contrib-wordpress/settings/publishing/
+#   owner: CodeWithEmad, repository: tutor-contrib-wordpress,
+#   workflow: publish-pypi.yml, environment: pypi
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Build sdist and wheel
+        run: |
+          pip install hatch
+          hatch build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/tutor-contrib-wordpress
+    permissions:
+      id-token: write # required for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@v1.14.3

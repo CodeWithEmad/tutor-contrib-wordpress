@@ -2,33 +2,35 @@ name: Run tests
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
+  push:
+    branches: [main]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-         python-version: ['3.9', '3.12']
+        python-version: ["3.10", "3.13"]
+        tutor: [">=20,<21", ">=21,<22", ">=22,<23"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
+          cache: pip
       - name: Install dependencies
         run: |
-          if [ "${{ matrix.python-version }}" = "3.7" ]; then
-            pip install "tutor==15.0.0" pylint black mypy
-          else
-            pip install -U tutor
-          fi
-          echo "Installing tutor-contrib-wordpress"
-          pip install .[dev]
-          echo "Enable wordpress plugin and save configuration"
+          python -m pip install --upgrade pip
+          pip install ".[dev]" "tutor${{ matrix.tutor }}"
+      - name: Enable plugin and render the environment
+        run: |
           tutor plugins enable wordpress
           tutor config save
+          grep -q "wordpress:" "$(tutor config printroot)/env/local/docker-compose.yml"
+          tutor config save --set WORDPRESS_RUN_LOCAL=false
+          ! grep -q "wordpress:" "$(tutor config printroot)/env/local/docker-compose.yml"
       - name: Test lint, types, and format
         run: make test

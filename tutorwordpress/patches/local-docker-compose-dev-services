@@ -1,11 +1,15 @@
+{%- if WORDPRESS_RUN_LOCAL %}
 wordpress:
   stdin_open: true
   tty: true
   ports:
     - {{ WORDPRESS_PORT }}:8080
+  {%- if WORDPRESS_DEBUG %}
   environment:
     WORDPRESS_DEBUG: 1
     WORDPRESS_CONFIG_EXTRA: |
-      define('WP_DEBUG', true);
       define('WP_DEBUG_LOG', true);
       define('WP_DEBUG_DISPLAY', true);
+      {{ WORDPRESS_CONFIG_EXTRA|replace("$", "$$")|indent(6) }}
+  {%- endif %}
+{%- endif %}

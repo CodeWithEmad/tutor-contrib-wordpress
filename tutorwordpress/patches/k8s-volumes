@@ -1,3 +1,4 @@
+{% if WORDPRESS_RUN_LOCAL %}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -12,3 +13,4 @@ spec:
   resources:
     requests:
       storage: {{ WORDPRESS_DATA_VOLUME_SIZE }}
+{% endif %}

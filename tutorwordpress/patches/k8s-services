@@ -1,3 +1,4 @@
+{% if WORDPRESS_RUN_LOCAL %}
 ---
 apiVersion: v1
 kind: Service
@@ -6,8 +7,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: {{ WORDPRESS_PORT }}
+    - port: 8080
       targetPort: 8080
       protocol: TCP
   selector:
     app.kubernetes.io/name: wordpress
+{% endif %}

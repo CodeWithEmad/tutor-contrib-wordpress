@@ -1,3 +1,4 @@
+{% if WORDPRESS_RUN_LOCAL %}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -30,7 +31,7 @@ spec:
             - containerPort: 8080
           env:
             - name: WORDPRESS_DB_HOST
-              value: {{ WORDPRESS_MYSQL_HOST }}
+              value: {{ WORDPRESS_MYSQL_HOST }}:{{ WORDPRESS_MYSQL_PORT }}
             - name: WORDPRESS_DB_USER
               value: {{ WORDPRESS_MYSQL_USERNAME }}
             - name: WORDPRESS_DB_PASSWORD
@@ -39,6 +40,9 @@ spec:
               value: {{ WORDPRESS_MYSQL_DATABASE }}
             - name: WORDPRESS_TABLE_PREFIX
               value: {{ WORDPRESS_TABLE_PREFIX }}
+            - name: WORDPRESS_CONFIG_EXTRA
+              value: {{ WORDPRESS_CONFIG_EXTRA|tojson }}
+          resources: {{ WORDPRESS_K8S_RESOURCES|tojson }}
           volumeMounts:
             - name: wordpress-data
               mountPath: /var/www/html
@@ -49,3 +53,4 @@ spec:
         - name: wordpress-data
           persistentVolumeClaim:
             claimName: wordpress-data
+{% endif %}
