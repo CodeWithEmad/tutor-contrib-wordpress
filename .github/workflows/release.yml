@@ -5,9 +5,16 @@ on:
   push:
     tags:
       - "v*"
+  # Re-run the image build for an existing tag (e.g. after a failed run)
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Tag to build the image from (e.g. v2.0.0)
+        required: true
 
 jobs:
   github_release:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,10 +31,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build_and_push_image:
-    needs: github_release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
@@ -36,7 +44,7 @@ jobs:
       - name: Install Tutor and this plugin (from the tagged checkout)
         run: |
           pip install tutor .
-          tutor config save --interactive=false
+          tutor config save
           tutor plugins enable wordpress
       - uses: docker/login-action@v4
         with:
