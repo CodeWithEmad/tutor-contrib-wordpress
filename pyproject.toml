@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
   "tutor>=20.0.0,<23.0.0",
@@ -30,11 +31,9 @@ dynamic = ["version"]
 [project.optional-dependencies]
 dev = [
   "tutor[dev]>=20.0.0,<23.0.0",
-  "black>=26.0",
-  "hatch>=1.18",
-  "mypy>=2.0",
-  "pylint>=4.0",
-  "scriv>=1.8",
+  "black",
+  "hatch",
+  "pylint",
 ]
 
 [project.entry-points."tutor.plugin.v1"]

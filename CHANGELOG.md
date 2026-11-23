@@ -2,7 +2,7 @@
 <a id='changelog-2.0.0'></a>
 ## v2.0.0 (2026-11-23)
 
-- 💥[Improvement] Require Python 3.10+ and Tutor 20 to 22 (`tutor>=20,<23`). Older Tutor and Python versions stay on the 1.x release. (by @CodeWithEmad)
+- 💥[Improvement] Require Python 3.10+ (tested up to 3.14) and Tutor 20 to 22 (`tutor>=20,<23`). Older Tutor and Python versions stay on the 1.x release. (by @CodeWithEmad)
 - [Feature] Add `WORDPRESS_RUN_LOCAL` to skip the WordPress container and only configure Open edX for an external WordPress site. (by @CodeWithEmad)
 - [Feature] Add `WORDPRESS_DEBUG`, `WORDPRESS_CONFIG_EXTRA`, `WORDPRESS_PHP_MEMORY_LIMIT`, `WORDPRESS_UPLOAD_MAX_FILESIZE`, `WORDPRESS_EXTRA_PLUGINS` and `WORDPRESS_K8S_RESOURCES`. (by @CodeWithEmad)
 - [Bugfix] `WORDPRESS_PORT` no longer breaks Caddy routing: the container always listens on 8080 and the Kubernetes service always exposes 8080. (by @CodeWithEmad)
